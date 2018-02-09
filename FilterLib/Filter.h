@@ -1,4 +1,10 @@
 #pragma once
 
 
+class Filter
+{
 
+
+
+
+};
