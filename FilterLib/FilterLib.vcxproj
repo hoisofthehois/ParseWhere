@@ -117,6 +117,7 @@
   <ItemGroup>
     <ClInclude Include="Filter.h" />
     <ClInclude Include="Table.h" />
+    <ClInclude Include="TableDef.h" />
     <ClInclude Include="TableRow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

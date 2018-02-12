@@ -6,13 +6,17 @@
 template <typename TTab>
 class TableRow
 {
-	friend TTab;
 
 protected:
 
 	typename TTab::row_t m_data;
 
 public:
+
+	constexpr TableRow() : m_data() {}
+
+	template <typename... TVal>
+	TableRow(TVal ...args) : m_data{TTab::cell_t{args}...} {}
 
 	using cell_t = typename TTab::cell_t;
 

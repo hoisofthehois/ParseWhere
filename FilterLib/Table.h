@@ -1,50 +1,28 @@
 #pragma once
 
-#include <array>
-#include <variant>
-#include <tuple>
-#include <string>
-#include <exception>
+#include <vector>
+#include <utility>
 
-
-template <typename T>
-struct ColumnDef
-{
-	typedef T col_t;
-
-};
-
-struct IDColumn : public ColumnDef<long>
-{
-	static constexpr const char szName[] = "ID";
-};
-
+#include "TableDef.h"
+#include "TableRow.h"
 
 template <typename... TCols>
-class Table
+class Table : private TableDef<TCols...>
 {
+
+private:
+
+	std::vector<TableRow<TableDef<TCols...>>> m_vecRows;
 
 public:
 
-	static constexpr size_t NumColumns = sizeof...(TCols);
+	using row_t = TableRow<TableDef<TCols...>>;
 
-	typedef std::variant<typename TCols::col_t...> cell_t;
-	typedef std::array<cell_t, NumColumns> row_t;
-	typedef std::tuple<typename TCols::col_t...> types;
-
-	static constexpr const std::array<const char*, NumColumns> arr_names = {TCols::szName...};
-
-	static size_t getColumnNumber(const std::string& strColName)
+	template <typename... TVal>
+	row_t& Append(TVal... tpValues)
 	{
-		auto iCol = std::find_if(arr_names.cbegin(), arr_names.cend(),
-			[&strColName](const char* szColName) { return std::string(szColName) == strColName; });
-		if (iCol != arr_names.cend())
-			return iCol - arr_names.cbegin();
-		else
-		{
-			auto strMsg = "Column " + strColName + " not found.";
-			throw std::invalid_argument(strMsg.c_str());
-		}
+		m_vecRows.emplace_back(std::forward<TVal>(tpValues)...);
+		return m_vecRows.back();
 	}
 
 };
