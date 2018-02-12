@@ -2,6 +2,7 @@
 
 #include <array>
 #include <variant>
+#include <tuple>
 #include <string>
 #include <exception>
 
@@ -25,10 +26,13 @@ class Table
 
 public:
 
-	typedef std::variant<typename TCols::col_t...> cell_t;
-	typedef std::array<cell_t, sizeof...(TCols)> row_t;
+	static constexpr size_t NumColumns = sizeof...(TCols);
 
-	static constexpr const std::array<const char*, sizeof...(TCols)> arr_names = {TCols::szName...};
+	typedef std::variant<typename TCols::col_t...> cell_t;
+	typedef std::array<cell_t, NumColumns> row_t;
+	typedef std::tuple<typename TCols::col_t...> types;
+
+	static constexpr const std::array<const char*, NumColumns> arr_names = {TCols::szName...};
 
 	static size_t getColumnNumber(const std::string& strColName)
 	{

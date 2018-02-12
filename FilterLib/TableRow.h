@@ -29,12 +29,11 @@ public:
 	}
 
 	template<
-		size_t NCol,
-		typename TVal
+		size_t Col
 	>
-	constexpr void setValue(TVal val)
+	constexpr void setValue(std::enable_if_t< (Col < TTab::NumColumns), std::tuple_element_t<Col, typename TTab::types> > val)
 	{
-		m_data[NCol] = TTab::cell_t{std::in_place_index<NCol>, std::move(val)};
+		m_data[Col] = TTab::cell_t{std::in_place_index<Col>, std::move(val)};
 	}
 
 };
