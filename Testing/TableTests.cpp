@@ -59,12 +59,10 @@ namespace Testing
 			// Act
 			row.setValue<0>(12L);
 			row.setValue<1>(13L);
-			auto id = row.getValue("ID");
-			auto order = row.getValue("ORDER");
 
 			// Assert
-			Assert::AreEqual(12L, std::get<0>(id));
-			Assert::AreEqual(13L, std::get<1>(order));
+			Assert::AreEqual(12L, row.getValue<0>());
+			Assert::AreEqual(13L, row.getValue<1>());
 		}
 
 	};

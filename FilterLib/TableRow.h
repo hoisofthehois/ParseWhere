@@ -28,9 +28,13 @@ public:
 		m_data[nCol] = std::move(vtVal);
 	}
 
-	template<
-		size_t Col
-	>
+	template<size_t Col>
+	constexpr std::enable_if_t< (Col < TTab::NumColumns), std::tuple_element_t<Col, typename TTab::types> > getValue()
+	{
+		return std::get<Col>(m_data[Col]);
+	}
+
+	template<size_t Col>
 	constexpr void setValue(std::enable_if_t< (Col < TTab::NumColumns), std::tuple_element_t<Col, typename TTab::types> > val)
 	{
 		m_data[Col] = TTab::cell_t{std::in_place_index<Col>, std::move(val)};
