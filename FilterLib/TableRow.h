@@ -28,5 +28,14 @@ public:
 		m_data[nCol] = std::move(vtVal);
 	}
 
+	template<
+		size_t NCol,
+		typename TVal
+	>
+	constexpr void setValue(TVal val)
+	{
+		m_data[NCol] = TTab::cell_t{std::in_place_index<NCol>, std::move(val)};
+	}
+
 };
 

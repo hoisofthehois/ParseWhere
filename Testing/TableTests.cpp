@@ -18,14 +18,19 @@ struct CommentColumn : public ColumnDef<std::string>
 	static constexpr const char szName[] = "DESCR";
 };
 
+struct OrderColumn : public ColumnDef<long>
+{
+	static constexpr const char szName[] = "ORDER";
+};
+
 
 namespace Testing
 {		
-	TEST_CLASS(FilterTests)
+	TEST_CLASS(TableTests)
 	{
 	public:
 		
-		TEST_METHOD(table)
+		TEST_METHOD(simple_table)
 		{
 			// Arrange
 			Table<IDColumn, ValueColumn, CommentColumn> tab;
@@ -43,6 +48,23 @@ namespace Testing
 			Assert::AreEqual(12L, std::get<long>(id));
 			Assert::AreEqual(12.0, std::get<double>(val));
 			Assert::AreEqual("Twelve", std::get<std::string>(descr).c_str());
+		}
+
+		TEST_METHOD(duplicate_types)
+		{
+			// Arrange
+			Table<IDColumn, OrderColumn, ValueColumn> tab;
+			TableRow<decltype(tab)> row;
+
+			// Act
+			row.setValue<0>(12L);
+			row.setValue<1>(13L);
+			auto id = row.getValue("ID");
+			auto order = row.getValue("ORDER");
+
+			// Assert
+			Assert::AreEqual(12L, std::get<0>(id));
+			Assert::AreEqual(13L, std::get<1>(order));
 		}
 
 	};
