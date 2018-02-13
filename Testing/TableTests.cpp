@@ -69,13 +69,14 @@ namespace Testing
 		TEST_METHOD(append_row)
 		{
 			// Arrange
-			Table<IDColumn, ValueColumn, CommentColumn> tab;
+			Table<IDColumn, OrderColumn, ValueColumn, CommentColumn> tab;
 
 			// Act
-			auto&& row = tab.Append(12L, 12.0, "Twelve");
+			auto&& row = tab.Append(12L, 13L, 12.0, "Twelve");
 
 			// Assert
 			Assert::AreEqual(12L, row.getValue<0>());
+			Assert::AreEqual(13L, row.getValue<1>());
 			Assert::AreEqual(12.0, std::get<double>(row.getValue("VALUE")));
 			Assert::AreEqual("Twelve", std::get<std::string>(row.getValue("DESCR")).c_str());
 		}
