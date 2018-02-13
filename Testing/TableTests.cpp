@@ -81,5 +81,27 @@ namespace Testing
 			Assert::AreEqual("Twelve", std::get<std::string>(row.getValue("DESCR")).c_str());
 		}
 
+		TEST_METHOD(iterate)
+		{
+			// Arrange
+			Table<IDColumn, ValueColumn, CommentColumn> tab;
+			std::vector<ValueColumn::col_t> vecExpected{1.0, -3.0, 12.0, 22.2};
+			std::vector<ValueColumn::col_t> vecResult;
+			auto k = 0U;
+			for (auto&& dVal : vecExpected)
+				tab.emplace_back(++k, dVal, std::to_string(dVal));
+
+			// Act
+			for (auto&& row : tab)
+			{
+				auto vtVal = row.getValue("VALUE");
+				vecResult.push_back(std::get<double>(vtVal));
+			}
+
+			// Assert
+			Assert::IsTrue(vecExpected == vecResult);
+
+		}
+
 	};
 }
